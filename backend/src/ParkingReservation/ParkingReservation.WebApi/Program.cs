@@ -1,6 +1,22 @@
+using Npgsql;
+
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddOpenApi();
+var configuration = builder.Configuration;
+var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+using (var connection = new NpgsqlConnection(connectionString))
+{
+    connection.Open();
+    Console.WriteLine("Connexion à PostgreSQL réussie !");
+    using (var command = new NpgsqlCommand("SELECT NOW()", connection))
+    {
+        var result = command.ExecuteScalar();
+        Console.WriteLine($"Heure actuelle dans la base de données : {result}");
+    }
+}
 
 var app = builder.Build();
 
@@ -9,28 +25,4 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
-
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
