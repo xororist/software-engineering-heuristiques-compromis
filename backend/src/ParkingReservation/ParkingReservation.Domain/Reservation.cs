@@ -1,20 +1,53 @@
-﻿namespace ParkingReservation.Domain;
+﻿using ParkingReservation.Domain.User;
+
+namespace ParkingReservation.Domain;
 
 public class Reservation
 {
     public Guid Id { get; init; }
-    public Guid EmployeeId { get; set; }
+    public User.User User { get; set; }
     public ParkingLot? ParkingLot { get; set; }
     public DateTime BeginningOfReservation { get; set; }
     public DateTime EndOfReservation { get; set; }
     public bool HasBeenConfirmed { get; set; }
 
-    public Reservation(Guid employeeId, ParkingLot parkingLot, DateTime beginning, DateTime end)
+    public Reservation(User.User user, ParkingLot parkingLot, DateTime beginning, DateTime end)
     {
+        if (!CheckReservationValidity(beginning, end))
+        {
+            throw new ArgumentException("Reservation dates are not valid.");
+        }
+        
         Id = new Guid();
-        EmployeeId = employeeId;
+        User = user;
         ParkingLot = parkingLot;
         BeginningOfReservation = beginning;
         EndOfReservation = end;
     }
+    
+    
+    private bool CheckReservationValidity(DateTime beginningOfReservation, DateTime endOfReservation)
+    {
+        if (beginningOfReservation >= endOfReservation || endOfReservation < DateTime.Now)
+            return false;
+        var totalDays = (endOfReservation - beginningOfReservation).TotalDays;
+        if (User.Role.Equals(Role.Manager))
+        {
+            if (totalDays > 30)
+            {
+                return false;
+            };
+            
+        }
+        else
+        {
+            if (totalDays > 5)
+            {
+                return false;
+            } 
+        }
+        return true;
+    }
+    
+    
 }

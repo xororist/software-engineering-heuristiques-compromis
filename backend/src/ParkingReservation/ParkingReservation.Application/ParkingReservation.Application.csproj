@@ -11,4 +11,10 @@
     <ProjectReference Include="..\ParkingReservation.Infrastructure\ParkingReservation.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UsesCases\CancelAReservation\" />
+    <Folder Include="UsesCases\CheckAvailablePlaces\" />
+    <Folder Include="UsesCases\MakeAReservation\" />
+  </ItemGroup>
+
 </Project>
