@@ -1,5 +1,6 @@
 services:
   server:
+    container_name: reservation-service
     build:
       context: ./backend/src
       target: final
@@ -12,6 +13,7 @@ services:
         condition: service_healthy
 
   frontend:
+    container_name: frontend
     build:
       context: ./front
     ports:
@@ -22,6 +24,7 @@ services:
       - server
 
   db:
+    container_name: postgres-database
     image: postgres
     restart: always
     volumes:
