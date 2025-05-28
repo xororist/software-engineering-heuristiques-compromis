@@ -7,9 +7,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
+const string allowFrontend = "allowFrontend";
+
 
 builder.Services.AddScoped<IQueryAvailablePlaces, ParkingRepository>();
 builder.Services.AddScoped<IGetAvailablePlaces, GetAvailablePlaces>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: allowFrontend,
+        policy  =>
+        {
+            policy.WithOrigins("http://localhost:3000");
+        });
+});
 
 /*using (var connection = new NpgsqlConnection(connectionString))
 {
@@ -36,5 +47,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseCors(allowFrontend);
 
 app.Run();
