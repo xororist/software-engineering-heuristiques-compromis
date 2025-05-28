@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="09f1100d-2e3c-4ad1-aedc-e01c9558202c" name="Changes" comment="" />
+    <list default="true" id="09f1100d-2e3c-4ad1-aedc-e01c9558202c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/front/environment.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/front/src/model/test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/app/app.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/app/app.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/app/app.config.server.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/app/app.config.server.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/app/app.config.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,8 +39,9 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Node.js.app.component.ts.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature/init-front",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/kokouvihubertzodjihoue/Desktop/ESGI/softwareHeuristique",
     "node.js.detected.package.eslint": "true",
@@ -40,6 +49,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/Users/kokouvihubertzodjihoue/Desktop/ESGI/softwareHeuristique/front/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
