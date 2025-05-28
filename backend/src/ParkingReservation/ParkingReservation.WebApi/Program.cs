@@ -2,7 +2,6 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddOpenApi();
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -19,6 +18,8 @@ using (var connection = new NpgsqlConnection(connectionString))
 }
 
 var app = builder.Build();
+
+app.MapGet("/", () => "Hello World!");
 
 if (app.Environment.IsDevelopment())
 {
