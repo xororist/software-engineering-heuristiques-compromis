@@ -1,6 +1,10 @@
-﻿namespace ParkingReservation.Application.UsesCases.CheckInReservation;
+﻿using ParkingReservation.Application.Dtos;
+using ParkingReservation.Domain;
+using ParkingReservation.Domain.Repositories;
 
-public class ICheckInAReservationHandler
+namespace ParkingReservation.Application.UsesCases.CheckInReservation;
+
+public interface ICheckInAReservationHandler
 {
-   
+   public Task HandleAsync(IReservationRepository repository, CheckInAReservationCommand command);
 }
