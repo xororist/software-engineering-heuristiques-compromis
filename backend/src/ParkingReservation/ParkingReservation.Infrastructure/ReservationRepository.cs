@@ -23,6 +23,11 @@ public class ReservationRepository: IReservationRepository
         var reservation = reservations.FirstOrDefault(r => r.User.Id == userId);
         return Task.FromResult(reservation);
     }
+    
+    public Task CancelReservationAsync(Guid reservationId)
+    {
+        throw new NotImplementedException();
+    }
 
 
     public void CheckInReservationAsync(Guid reservationId)
