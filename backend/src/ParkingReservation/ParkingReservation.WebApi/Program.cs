@@ -1,4 +1,6 @@
 using Npgsql;
+using ParkingReservation.Application.Dtos;
+using ParkingReservation.Application.UsesCases.CheckInReservation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,5 +27,18 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.MapGet("/check-in/", async (CheckInAReservationCommand command,ICheckInAReservationHandler query) =>
+{
+    try
+    {
+        await query.HandleAsync(command);
+        return Results.Ok();
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest(e.Message);
+    }
+});
 
 app.Run();

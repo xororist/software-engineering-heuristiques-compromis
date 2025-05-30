@@ -18,20 +18,31 @@ public class ReservationRepository: IReservationRepository
         return Task.FromResult<IEnumerable<Reservation>>(reservations);
     }
 
-    Task<Reservation> IReservationRepository.GetByUserIdAsync(Guid userId)
+    public Task<Reservation> GetByUserIdAsync(Guid userId)
     {
-        var userReservations = reservations.Where(r => r.User.Id == userId);
-        return Task.FromResult<Reservation>(userReservations);    }
-
-    public Task CheckInReservationAsync(Guid reservationId)
-    {
-        throw new NotImplementedException();
+        var reservation = reservations.FirstOrDefault(r => r.User.Id == userId);
+        return Task.FromResult(reservation);
     }
 
-    public Task<IEnumerable<Reservation>> GetByUserIdAsync(Guid userId)
+
+    public void CheckInReservationAsync(Guid reservationId)
     {
+        var userReservations = reservations.FirstOrDefault(r => r.Id == reservationId);
         
+        if (userReservations != null)
+        {
+            reservations.Remove(userReservations);
+            userReservations.HasBeenConfirmed = true;
+            reservations.Add(userReservations);
+        }
+
+ 
     }
+
+    //public Task<IEnumerable<Reservation>> GetByUserIdAsync(Guid userId)
+    //{
+        
+    //}
    
 
 

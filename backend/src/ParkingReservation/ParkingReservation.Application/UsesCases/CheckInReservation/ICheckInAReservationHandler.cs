@@ -6,5 +6,5 @@ namespace ParkingReservation.Application.UsesCases.CheckInReservation;
 
 public interface ICheckInAReservationHandler
 {
-   public Task HandleAsync(IReservationRepository repository, CheckInAReservationCommand command);
+   public Task HandleAsync(CheckInAReservationCommand command);
 }

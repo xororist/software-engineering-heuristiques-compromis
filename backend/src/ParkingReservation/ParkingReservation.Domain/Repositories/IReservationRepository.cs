@@ -7,5 +7,5 @@ public interface IReservationRepository
     Task<IEnumerable<Reservation>> GetAllAsync();
     Task<Reservation> GetByUserIdAsync(Guid userId);
     //Task<bool> ReservationIsCorrectAsync(Guid userId, char row, int column, DateTime checkInTime);
-    Task CheckInReservationAsync(Guid reservationId);
+    void CheckInReservationAsync(Guid reservationId);
 }
