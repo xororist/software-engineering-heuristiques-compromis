@@ -24,9 +24,16 @@ public class ReservationRepository: IReservationRepository
         return Task.FromResult(reservation);
     }
     
-    public Task CancelReservationAsync(Guid reservationId)
+    public void CancelReservationAsync(Guid reservationId)
     {
-        throw new NotImplementedException();
+        var userReservations = reservations.FirstOrDefault(r => r.Id == reservationId);
+        
+        if (userReservations != null)
+        {
+            reservations.Remove(userReservations);
+            userReservations.HasBeenCancelled = true;
+            reservations.Add(userReservations);
+        }
     }
 
 

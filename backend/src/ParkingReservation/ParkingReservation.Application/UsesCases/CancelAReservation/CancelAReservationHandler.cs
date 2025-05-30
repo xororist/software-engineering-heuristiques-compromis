@@ -18,6 +18,6 @@ public class CancelAReservationHandler : ICancelAReservationHandler
         if (DateTime.Now >= reservation.BeginningOfReservation)
             throw new Exception("You cannot cancel a reservation that has already started.");
 
-        await repository.CancelReservationAsync(command.ReservationId);
+        repository.CancelReservationAsync(command.ReservationId);
     }
 }
