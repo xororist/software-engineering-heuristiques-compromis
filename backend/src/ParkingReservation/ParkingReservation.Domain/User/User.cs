@@ -2,11 +2,14 @@
 
 public class User
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
     public Role Role { get; set; }
+
+    public User() {} 
 
     public User(Role role)
     {
-        this.Role = role;
+        Id = Guid.NewGuid();
+        Role = role;
     }
 }

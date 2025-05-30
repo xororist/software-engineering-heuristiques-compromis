@@ -1,23 +1,30 @@
-﻿using ParkingReservation.Domain;
+﻿using ParkingReservation.Application.Dtos;
 using ParkingReservation.Domain.Query;
 
 namespace ParkingReservation.Application.UsesCases;
 
 public interface IGetAvailablePlaces
 {
-    IEnumerable<AvailableParkingLotsInfo> Handle();
+    IEnumerable<ParkingLotDto> Handle();
 }
 
-public class AvailableParkingLotsInfo(char row, int column, bool isAvailable);
-
-public class GetAvailablePlaces(IQueryAvailablePlaces query) : IGetAvailablePlaces
+public class GetAvailablePlaces : IGetAvailablePlaces
 {
-    public IEnumerable<AvailableParkingLotsInfo> Handle()
+    private readonly IQueryAvailablePlaces _repository;
+
+    public GetAvailablePlaces(IQueryAvailablePlaces repository)
     {
-        return query.GetAvailablePlaces().Select(x => 
-            new AvailableParkingLotsInfo(
-                row:x.Row, 
-                column:x.Column, 
-                isAvailable:x.IsAvailable));
+        _repository = repository;
+    }
+
+    public IEnumerable<ParkingLotDto> Handle()
+    {
+        return _repository.GetAvailablePlaces()
+            .Select(p => new ParkingLotDto
+            {
+                Row = p.Row,
+                Column = p.Column,
+                IsAvailable = p.IsAvailable
+            });
     }
 }

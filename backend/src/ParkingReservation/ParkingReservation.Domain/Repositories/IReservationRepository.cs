@@ -9,4 +9,5 @@ public interface IReservationRepository
     //Task<bool> ReservationIsCorrectAsync(Guid userId, char row, int column, DateTime checkInTime);
     void AddReservationAsync(Reservation reservation);
     void CheckInReservationAsync(Guid reservationId);
+    void CancelReservationAsync(Guid reservationId);
 }
