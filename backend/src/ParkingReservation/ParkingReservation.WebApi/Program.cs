@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ParkingReservation.Application.Dtos;
 using ParkingReservation.Application.UsesCases;
 using ParkingReservation.Application.UsesCases.CheckInReservation;
+using ParkingReservation.Domain;
 using ParkingReservation.Domain.Query;
 using ParkingReservation.Infrastructure;
 
@@ -15,27 +17,43 @@ const string allowAll = "allowAll";
 builder.Services.AddScoped<IQueryAvailablePlaces, ParkingRepository>();
 builder.Services.AddScoped<IGetAvailablePlaces, GetAvailablePlaces>();
 
+builder.Services.AddDbContext<ReservationDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowAll,
-        policy  =>
+        policy =>
         {
-            policy.WithOrigins("*");
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
         });
 });
 
-/*using (var connection = new NpgsqlConnection(connectionString))
-{
-    connection.Open();
-    Console.WriteLine("Connexion à PostgreSQL réussie !");
-    using (var command = new NpgsqlCommand("SELECT NOW()", connection))
-    {
-        var result = command.ExecuteScalar();
-        Console.WriteLine($"Heure actuelle dans la base de données : {result}");
-    }
-}*/
-
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ReservationDbContext>();
+
+    if (!db.ParkingLots.Any())
+    {
+        var rows = new[] { 'A', 'B', 'C', 'D', 'E', 'F' };
+        const int maxColumns = 10;
+
+        var parkingSpots = new List<ParkingLot>();
+
+        foreach (var row in rows)
+        {
+            for (int column = 0; column <= maxColumns; column++)
+            {
+                parkingSpots.Add(new ParkingLot(row, column, true));
+            }
+        }
+
+        db.ParkingLots.AddRange(parkingSpots);
+        db.SaveChanges();
+    }
+}
 
 app.MapGet("/", () => "Hello World!");
 
@@ -44,7 +62,6 @@ app.MapGet("/available-places", (IGetAvailablePlaces query) =>
     var places = query.Handle();
     return Results.Ok(places);
 });
-
 
 app.MapOpenApi();
 app.UseCors(allowAll);
