@@ -18,7 +18,7 @@ public class Reservation
 
     public Reservation(User.User user, ParkingLot parkingLot, DateTime beginning, DateTime end)
     {
-        if (!CheckReservationValidity(beginning, end))
+        if (!CheckReservationValidity(user, beginning, end))
             throw new ArgumentException("Reservation dates are not valid.");
 
         Id = Guid.NewGuid();
@@ -30,13 +30,13 @@ public class Reservation
         HasBeenConfirmed = false;
     }
 
-    private bool CheckReservationValidity(DateTime beginningOfReservation, DateTime endOfReservation)
+    private bool CheckReservationValidity(User.User user, DateTime beginningOfReservation, DateTime endOfReservation)
     {
         if (beginningOfReservation >= endOfReservation || endOfReservation < DateTime.Now)
             return false;
 
         var totalDays = (endOfReservation - beginningOfReservation).TotalDays;
 
-        return User.Role == Role.Manager ? totalDays <= 30 : totalDays <= 5;
+        return user.Role == Role.Manager ? totalDays <= 30 : totalDays <= 5;
     }
 }

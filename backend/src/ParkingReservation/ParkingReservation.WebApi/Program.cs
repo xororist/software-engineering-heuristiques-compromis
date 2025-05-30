@@ -21,10 +21,8 @@ builder.Services.AddScoped<IQueryAvailablePlaces, ParkingRepository>();
 builder.Services.AddScoped<IGetAvailablePlaces, GetAvailablePlaces>();
 builder.Services.AddScoped<IMakeAReservationHandler, MakeAReservationHandler>();
 builder.Services.AddScoped<ICancelAReservationHandler, CancelAReservationHandler>();
-
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
-
-
+builder.Services.AddScoped<IParkingLotRepository, ParkingLotRepository>();
 
 builder.Services.AddScoped<ICheckInAReservationHandler, CheckInAReservationHandler>();
 builder.Services.AddDbContext<ReservationDbContext>(options =>
@@ -56,7 +54,7 @@ using (var scope = app.Services.CreateScope())
         {
             for (int column = 0; column <= maxColumns; column++)
             {
-                parkingSpots.Add(new ParkingLot(row, column, true));
+                parkingSpots.Add(new ParkingLot(row, column));
             }
         }
 
@@ -76,7 +74,7 @@ app.MapGet("/available-places", async ([FromServices] IGetAvailablePlaces getAva
 
 app.UseCors(allowAll);
 
-app.MapPost("/make-reservation/",
+app.MapPost("/make-reservation",
     async ([FromBody] MakeAReservationCommand command, [FromServices] IMakeAReservationHandler query) =>
     {
         try
@@ -90,7 +88,7 @@ app.MapPost("/make-reservation/",
         }
     });
 
-app.MapPost("/check-in/",
+app.MapPost("/check-in",
     async ([FromBody] CheckInAReservationCommand command, [FromServices] ICheckInAReservationHandler query) =>
     {
         try

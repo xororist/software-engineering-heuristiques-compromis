@@ -2,5 +2,4 @@
 
 public interface IQueryAvailablePlaces
 {
-    IEnumerable<ParkingLot> GetAvailablePlaces();
 }

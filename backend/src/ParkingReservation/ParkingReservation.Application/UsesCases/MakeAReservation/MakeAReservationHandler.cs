@@ -5,7 +5,10 @@ using ParkingReservation.Domain.User;
 
 namespace ParkingReservation.Application.UsesCases.MakeAReservation;
 
-public class MakeAReservationHandler(IReservationRepository repository, IUserRepository userRepository)
+public class MakeAReservationHandler(
+    IReservationRepository repository, 
+    IUserRepository userRepository,
+    IParkingLotRepository parkingLotRepository)
     : IMakeAReservationHandler
 {
     public async Task HandleAsync(MakeAReservationCommand command)
@@ -16,9 +19,23 @@ public class MakeAReservationHandler(IReservationRepository repository, IUserRep
             throw new Exception("User not found");
         }
 
-        var parkingLot = new ParkingLot(command.Row, command.Column, command.IsAvailable);
-        var reservation = new Reservation(user, parkingLot, command.BeginningOfReservation, command.EndOfReservation);
+        var parkingLot = await parkingLotRepository.GetByCoordinatesAsync(command.Row, command.Column);
+        if (parkingLot == null)
+        {
+            throw new Exception("Parking lot not found");
+        }
 
-        repository.AddReservationAsync(reservation);
+        bool isAvailable = await repository.IsParkingLotAvailableAsync(
+            parkingLot.Id, 
+            command.BeginningOfReservation, 
+            command.EndOfReservation);
+
+        if (!isAvailable)
+        {
+            throw new Exception("Ce parking est déjà réservé pour la période demandée");
+        }
+
+        var reservation = new Reservation(user, parkingLot, command.BeginningOfReservation, command.EndOfReservation);
+        await repository.AddReservationAsync(reservation);
     }
 }
