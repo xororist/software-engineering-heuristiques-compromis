@@ -18,18 +18,11 @@ public class ParkingRepository : IQueryAvailablePlaces
         {
             for (var column = 0; column <= MaxColumns; column++)
             {
-                _parkingGrid[(row, column)] = new ParkingLot
-                {
-                    Row = row,
-                    Column = column,
-                    IsAvailable = true
-                };
+                _parkingGrid[(row, column)] = new ParkingLot(row, column, true);
             }
         }
     }
-
-    public IEnumerable<ParkingLot> GetAllPlaces() => _parkingGrid.Values;
-
+    
     public IEnumerable<ParkingLot> GetAvailablePlaces()
     {
         return _parkingGrid.Values.Where(p => p.IsAvailable);
