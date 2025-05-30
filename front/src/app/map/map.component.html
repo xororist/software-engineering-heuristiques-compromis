@@ -1,0 +1,9 @@
+<div class="grid">
+  <div class="row" *ngFor="let rowKey of parkingData | keyvalue">
+    <div class="square"
+         *ngFor="let spot of rowKey.value"
+         [ngClass]="{'available': spot.isAvailable, 'unavailable': !spot.isAvailable}">
+      {{ spot.column }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 4px;
+}
+
+.square {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-family: sans-serif;
+  color: white;
+}
+
+.available {
+  background-color: green;
+}
+
+.unavailable {
+  background-color: red;
+}
