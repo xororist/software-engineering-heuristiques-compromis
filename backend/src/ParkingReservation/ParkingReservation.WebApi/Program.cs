@@ -43,11 +43,8 @@ app.MapGet("/available-places", (IGetAvailablePlaces query) =>
     return Results.Ok(places);
 });
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
 
+app.MapOpenApi();
 app.UseCors(allowFrontend);
 
 app.Run();
