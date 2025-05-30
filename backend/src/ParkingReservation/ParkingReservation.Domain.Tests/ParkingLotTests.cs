@@ -1,7 +1,4 @@
-using ParkingReservation.Domain;
-using Xunit;
-
-namespace ParkingReservation.Tests
+namespace ParkingReservation.Domain.Tests
 {
     public class ParkingLotTests
     {
@@ -13,13 +10,11 @@ namespace ParkingReservation.Tests
         [InlineData('B', -1, false)]  
         [InlineData('E', 11, false)]  
         [InlineData('X', 100, false)]
-        public void IsValidParkingLot_ShouldReturnExpectedResult(char row, int column, bool expected)
+        public void IsValidParkingLot_ShouldReturnExpectedResult(char row, int column, bool isAvailable)
         {
-            var parkingLot = new ParkingLot();
+            var result = ParkingLot.IsValidParkingLot(row, column);
 
-            var result = parkingLot.IsValidParkingLot(row, column);
-
-            Assert.Equal(expected, result);
+            Assert.Equal(isAvailable, result);
         }
     }
 }
