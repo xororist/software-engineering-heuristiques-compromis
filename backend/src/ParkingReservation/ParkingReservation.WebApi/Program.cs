@@ -6,11 +6,11 @@ using ParkingReservation.Application.UseCases.CancelReservation;
 using ParkingReservation.Application.UsesCases.CheckInReservation;
 using ParkingReservation.Domain;
 using ParkingReservation.Domain.Query;
+using ParkingReservation.Domain.Repositories;
 using ParkingReservation.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 const string allowAll = "allowAll";
@@ -19,7 +19,11 @@ builder.Services.AddScoped<IQueryAvailablePlaces, ParkingRepository>();
 builder.Services.AddScoped<IGetAvailablePlaces, GetAvailablePlaces>();
 builder.Services.AddScoped<ICancelAReservationHandler, CancelAReservationHandler>();
 
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
+
+
+builder.Services.AddScoped<ICheckInAReservationHandler, CheckInAReservationHandler>();
 builder.Services.AddDbContext<ReservationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -60,13 +64,13 @@ using (var scope = app.Services.CreateScope())
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/available-places", (IGetAvailablePlaces query) =>
+app.MapGet("/available-places", async ([FromServices] IGetAvailablePlaces getAvailablePlaces) =>
 {
-    var places = query.Handle();
-    return Results.Ok(places);
+    var result = await getAvailablePlaces.Handle();
+    return Results.Ok(result);
 });
 
-app.MapOpenApi();
+
 app.UseCors(allowAll);
 
 app.MapPost("/check-in/",
@@ -83,18 +87,7 @@ app.MapPost("/check-in/",
         }
     });
 
-app.MapPost("/cancel-reservation", async (CancelAReservationCommand command, ICancelAReservationHandler handler) =>
-{
-    try
-    {
-        await handler.HandleAsync(command);
-        return Results.Ok("Reservation cancelled successfully.");
-    }
-    catch (Exception e)
-    {
-        return Results.BadRequest(e.Message);
-    }
-});
+
 
 app.Run();
 
