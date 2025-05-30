@@ -1,8 +1,8 @@
 ﻿namespace ParkingReservation.Application.Dtos;
 
-public class ParkingLotDto
+public class ParkingLotDto(char row, int column, bool isAvailable)
 {
-    public char Row { get; set; }
-    public int Column { get; set; }
-    public bool IsAvailable { get; set; }
+    public char Row { get; set; } = row;
+    public int Column { get; set; } = column;
+    public bool IsAvailable { get; set; } = isAvailable;
 }

@@ -11,7 +11,7 @@ public class ReservationDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
     public DbSet<ParkingLot> ParkingLots => Set<ParkingLot>();
-    public DbSet<Reservation> Reservations => Set<Reservation>();
+    public DbSet<Reservation?> Reservations => Set<Reservation>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

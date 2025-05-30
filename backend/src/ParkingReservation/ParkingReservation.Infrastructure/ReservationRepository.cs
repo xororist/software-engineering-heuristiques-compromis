@@ -1,74 +1,74 @@
-﻿using ParkingReservation.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using ParkingReservation.Domain;
 using ParkingReservation.Domain.Repositories;
 
 namespace ParkingReservation.Infrastructure;
 
 public class ReservationRepository: IReservationRepository
 {
-    List<Reservation> reservations = [];
-    
-    public Task<Reservation?> GetByIdAsync(Guid id)
+    private readonly ReservationDbContext _dbContext;
+
+    public ReservationRepository(ReservationDbContext dbContext)
     {
-        var reservation = reservations.FirstOrDefault(r => r.Id == id);
-        return Task.FromResult(reservation);
+        _dbContext = dbContext;
     }
 
-    public Task<IEnumerable<Reservation>> GetAllAsync()
+    public async Task<Reservation?> GetByIdAsync(Guid id)
     {
-        return Task.FromResult<IEnumerable<Reservation>>(reservations);
+        return await _dbContext.Reservations
+            .Include(r => r.User)
+            .Include(r => r.ParkingLot)
+            .FirstOrDefaultAsync(r => r.Id == id);
     }
 
-    public Task<Reservation> GetByUserIdAsync(Guid userId)
+    public async Task<IEnumerable<Reservation>> GetAllAsync()
     {
-        var reservation = reservations.FirstOrDefault(r => r.User.Id == userId);
-        return Task.FromResult(reservation);
+        return await _dbContext.Reservations
+            .Include(r => r!.User)
+            .Include(r => r!.ParkingLot)
+            .ToListAsync();
     }
-    
-    public void CancelReservationAsync(Guid reservationId)
+
+    public async Task<Reservation?> GetByUserIdAsync(Guid userId)
     {
-        var userReservations = reservations.FirstOrDefault(r => r.Id == reservationId);
+        return await _dbContext.Reservations
+            .Include(r => r!.User)
+            .Include(r => r!.ParkingLot)
+            .FirstOrDefaultAsync(r => r != null && r.User.Id == userId);
+    }
+
+    public async Task CancelReservationAsync(Guid reservationId)
+    {
+        var reservation = await _dbContext.Reservations.FindAsync(reservationId);
         
-        if (userReservations != null)
+        if (reservation != null)
         {
-            reservations.Remove(userReservations);
-            userReservations.HasBeenCancelled = true;
-            reservations.Add(userReservations);
+            // Supposant que HasBeenCancelled existe dans votre modèle
+            reservation.HasBeenCancelled = true;
+            await _dbContext.SaveChangesAsync();
         }
     }
 
-
-    public void CheckInReservationAsync(Guid reservationId)
+    public async Task CheckInReservationAsync(Guid reservationId)
     {
-        var userReservations = reservations.FirstOrDefault(r => r.Id == reservationId);
-        
-        if (userReservations != null)
-        {
-            reservations.Remove(userReservations);
-            userReservations.HasBeenConfirmed = true;
-            reservations.Add(userReservations);
-        }
+        var reservation = await _dbContext.Reservations.FindAsync(reservationId);
 
- 
+        if (reservation == null) return;
+        reservation.HasBeenConfirmed = true;
+        await _dbContext.SaveChangesAsync();
     }
 
-    //public Task<IEnumerable<Reservation>> GetByUserIdAsync(Guid userId)
-    //{
-        
-    //}
-   
-
-
-
-    /*public Task<bool> ReservationIsCorrectAsync(Guid userId, char row, int column, DateTime checkInTime)
+    public async Task<IEnumerable<ParkingLot>> FetchAvailablePlacesAsync()
     {
-        var reservation = reservations.FirstOrDefault(r =>
-            r.User.Id == userId && r.ParkingLot.Row == row && r.ParkingLot.Column == column && r.D == checkInTime);
-        return Task.FromResult(reservation != null);
+        var currentlyReservedParkingLotIds = await _dbContext.Reservations
+            .Where(r => r!.BeginningOfReservation <= DateTime.UtcNow 
+                        && r.EndOfReservation > DateTime.UtcNow
+                        && !r.HasBeenCancelled)
+            .Select(r => r!.ParkingLot!.Id)
+            .ToListAsync();
+        
+        return await _dbContext.ParkingLots
+            .Where(p => !currentlyReservedParkingLotIds.Contains(p.Id))
+            .ToListAsync();
     }
-
-    public Task CheckInReservationAsync(Guid userId, char row, int column, DateTime checkInTime)
-    {
-        
-*/
-   
 }
