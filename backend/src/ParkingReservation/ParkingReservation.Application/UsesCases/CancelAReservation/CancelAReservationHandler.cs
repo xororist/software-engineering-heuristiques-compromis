@@ -4,9 +4,9 @@ using ParkingReservation.Domain.Repositories;
 
 namespace ParkingReservation.Application.UseCases.CancelReservation;
 
-public class CancelAReservationHandler : ICancelAReservationHandler
+public class CancelAReservationHandler(IReservationRepository repository) : ICancelAReservationHandler
 {
-    public async Task HandleAsync(IReservationRepository repository, CancelAReservationCommand command)
+    public async Task HandleAsync(CancelAReservationCommand command)
     {
         var reservation = await repository.GetByIdAsync(command.ReservationId);
         if (reservation == null)

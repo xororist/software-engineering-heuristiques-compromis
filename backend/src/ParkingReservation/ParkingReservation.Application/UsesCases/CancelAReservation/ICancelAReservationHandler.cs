@@ -5,5 +5,5 @@ namespace ParkingReservation.Application.UseCases.CancelReservation;
 
 public interface ICancelAReservationHandler
 {
-    public Task HandleAsync(IReservationRepository repository, CancelAReservationCommand command);
+    public Task HandleAsync(CancelAReservationCommand command);
 }

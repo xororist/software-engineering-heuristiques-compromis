@@ -1,5 +1,6 @@
 using ParkingReservation.Application.Dtos;
 using ParkingReservation.Application.UsesCases;
+using ParkingReservation.Application.UseCases.CancelReservation;
 using ParkingReservation.Application.UsesCases.CheckInReservation;
 using ParkingReservation.Domain.Query;
 using ParkingReservation.Infrastructure;
@@ -13,6 +14,8 @@ const string allowAll = "allowAll";
 
 builder.Services.AddScoped<IQueryAvailablePlaces, ParkingRepository>();
 builder.Services.AddScoped<IGetAvailablePlaces, GetAvailablePlaces>();
+builder.Services.AddScoped<ICancelAReservationHandler, CancelAReservationHandler>();
+
 
 builder.Services.AddCors(options =>
 {
@@ -54,6 +57,19 @@ app.MapGet("/check-in/", async (CheckInAReservationCommand command,ICheckInARese
     {
         await query.HandleAsync(command);
         return Results.Ok();
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest(e.Message);
+    }
+});
+
+app.MapPost("/cancel-reservation", async (CancelAReservationCommand command, ICancelAReservationHandler handler) =>
+{
+    try
+    {
+        await handler.HandleAsync(command);
+        return Results.Ok("Reservation cancelled successfully.");
     }
     catch (Exception e)
     {
