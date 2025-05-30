@@ -37,7 +37,5 @@ export class MapComponent  implements OnInit{
   }
 
 
-
-
-
+  protected readonly Object = Object;
 }
