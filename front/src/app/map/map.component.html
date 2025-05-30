@@ -1,10 +1,10 @@
 <div class="flex flex-col items-center justify-center space-y-4">
 
-  <!-- ENTRY exactement au-dessus de A01 -->
+
   <div class="flex items-center gap-2">
     <div class="w-8"></div> <!-- Espace pour aligner avec le label A -->
     <div class="flex gap-1">
-      <!-- ENTRY au-dessus de A01 (première colonne) -->
+
       <div class="w-24 h-8 flex flex-col items-center justify-center">
         <div class="w-6 h-6 bg-blue-500 rounded flex items-center justify-center mb-1">
           <span class="text-white text-sm">↓</span>
@@ -33,8 +33,7 @@
     </div>
   </div>
 
-
-    <div class="my-3">
+  <div class="my-3">
     <div class="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
       <span class="text-white text-xl">→</span>
     </div>
@@ -75,13 +74,11 @@
     </div>
   </div>
 
-
   <div class="my-3">
     <div class="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
       <span class="text-white text-xl">→</span>
     </div>
   </div>
-
 
   <div class="flex items-center gap-2">
     <div class="w-8 font-bold text-gray-700 text-center">F</div>
@@ -92,26 +89,56 @@
              'border-green-500': spot.isAvailable,
              'border-red-500': !spot.isAvailable
            }">
-
         <mat-icon class="text-black mb-1" style="font-size: 25px;">ev_station</mat-icon>
-
         {{ 'F' + (spot.column + 1).toString().padStart(2, '0') }}
       </div>
     </div>
   </div>
 
-
   <div class="flex items-center gap-2">
     <div class="w-8"></div>
     <div class="flex gap-1">
-
       <div *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]" class="w-24 h-8"></div>
-
       <div class="w-24 h-8 flex flex-col items-center justify-center">
         <span class="text-xs font-semibold text-gray-600 mb-1">EXIT</span>
         <div class="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
           <span class="text-white text-sm">↓</span>
         </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="mt-10 p-4 flex flex-row">
+
+
+    <div class="flex flex-wrap justify-center items-center gap-6">
+
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 border-2 border-green-500 rounded bg-white"></div>
+        <span class="text-sm text-gray-700">Place disponible</span>
+      </div>
+
+
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 border-2 border-red-500 rounded bg-white"></div>
+        <span class="text-sm text-gray-700">Place non disponible</span>
+      </div>
+
+
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 border-2 border-green-500 rounded bg-white flex items-center justify-center">
+          <mat-icon class="text-black" style="font-size: 14px;">ev_station</mat-icon>
+        </div>
+        <span class="text-sm text-gray-700">Borne disponible</span>
+      </div>
+
+
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 border-2 border-red-500 rounded bg-white flex items-center justify-center">
+          <mat-icon class="text-black" style="font-size: 14px;">ev_station</mat-icon>
+        </div>
+        <span class="text-sm text-gray-700">Borne non disponible</span>
       </div>
     </div>
   </div>
