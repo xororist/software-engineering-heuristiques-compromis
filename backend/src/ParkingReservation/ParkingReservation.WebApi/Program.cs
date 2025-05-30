@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using ParkingReservation.Application.Dtos;
 using ParkingReservation.Application.UsesCases;
 using ParkingReservation.Application.UsesCases.CheckInReservation;
@@ -48,17 +49,18 @@ app.MapGet("/available-places", (IGetAvailablePlaces query) =>
 app.MapOpenApi();
 app.UseCors(allowAll);
 
-app.MapGet("/check-in/", async (CheckInAReservationCommand command,ICheckInAReservationHandler query) =>
-{
-    try
+app.MapPost("/check-in/",
+    async ([FromBody] CheckInAReservationCommand command, [FromServices] ICheckInAReservationHandler query) =>
     {
-        await query.HandleAsync(command);
-        return Results.Ok();
-    }
-    catch (Exception e)
-    {
-        return Results.BadRequest(e.Message);
-    }
-});
+        try
+        {
+            await query.HandleAsync(command);
+            return Results.Ok();
+        }
+        catch (Exception e)
+        {
+            return Results.BadRequest(e.Message);
+        }
+    });
 
 app.Run();
