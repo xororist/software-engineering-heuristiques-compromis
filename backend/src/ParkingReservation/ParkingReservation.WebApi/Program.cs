@@ -1,26 +1,25 @@
-
+using ParkingReservation.Application.Dtos;
 using ParkingReservation.Application.UsesCases;
+using ParkingReservation.Application.UsesCases.CheckInReservation;
 using ParkingReservation.Domain.Query;
 using ParkingReservation.Infrastructure;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
-const string allowFrontend = "allowFrontend";
-
+const string allowAll = "allowAll";
 
 builder.Services.AddScoped<IQueryAvailablePlaces, ParkingRepository>();
 builder.Services.AddScoped<IGetAvailablePlaces, GetAvailablePlaces>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: allowFrontend,
+    options.AddPolicy(name: allowAll,
         policy  =>
         {
-            policy.WithOrigins("http://localhost:3000");
+            policy.WithOrigins("*");
         });
 });
 
@@ -47,7 +46,7 @@ app.MapGet("/available-places", (IGetAvailablePlaces query) =>
 
 
 app.MapOpenApi();
-app.UseCors(allowFrontend);
+app.UseCors(allowAll);
 
 app.MapGet("/check-in/", async (CheckInAReservationCommand command,ICheckInAReservationHandler query) =>
 {
