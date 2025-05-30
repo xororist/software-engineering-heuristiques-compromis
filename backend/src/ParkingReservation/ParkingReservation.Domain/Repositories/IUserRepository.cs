@@ -4,6 +4,6 @@ namespace ParkingReservation.Domain.Repositories;
 
 public interface IUserRepository
 {
-    Task<AppUser?> GetByIdAsync(Guid userId);
+    Task<AppUser> GetByIdAsync(Guid userId);
     void AddUser(AppUser user);
 }

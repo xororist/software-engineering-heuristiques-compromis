@@ -9,7 +9,7 @@ public class ParkingLotMapper
         IEnumerable<ParkingLotDto> result = new List<ParkingLotDto>();
         foreach (ParkingLot p in parkingLots)
         {
-            result=result.Append(new ParkingLotDto(p.Row, p.Column, p.IsAvailable));
+            result=result.Append(new ParkingLotDto(p.Row, p.Column));
         }
 
         return result;

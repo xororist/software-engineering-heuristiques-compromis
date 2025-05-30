@@ -30,7 +30,6 @@ public class ReservationDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(1);
             entity.Property(p => p.Column).IsRequired();
-            entity.Property(p => p.IsAvailable).IsRequired();
         });
 
         modelBuilder.Entity<Reservation>(entity =>

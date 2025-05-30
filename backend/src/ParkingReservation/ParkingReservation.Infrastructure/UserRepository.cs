@@ -1,20 +1,26 @@
-﻿using ParkingReservation.Domain.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using ParkingReservation.Domain.Repositories;
 using ParkingReservation.Domain.User;
 
 namespace ParkingReservation.Infrastructure;
 
 public class UserRepository : IUserRepository
 {
-    private readonly List<User> _users = [];
+    private readonly ReservationDbContext _dbContext;
 
-    public Task<User?> GetByIdAsync(Guid userId)
+    
+    public UserRepository(ReservationDbContext dbContext)
     {
-        var user = _users.FirstOrDefault(u => u.Id == userId);
-        return Task.FromResult(user);
+        _dbContext = dbContext;
     }
-
+    public async Task<User?> GetByIdAsync(Guid userId)
+    {
+        return await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Id == userId);
+    }
+    
     public void AddUser(User user)
     {
-        _users.Add(user);
+        _dbContext.Users.Add(user);
     }
 }

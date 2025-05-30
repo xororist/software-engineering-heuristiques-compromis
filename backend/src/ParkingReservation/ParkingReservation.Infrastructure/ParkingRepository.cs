@@ -13,11 +13,5 @@ public class ParkingRepository : IQueryAvailablePlaces
         _dbContext = dbContext;
     }
 
-    public IEnumerable<ParkingLot> GetAvailablePlaces()
-    {
-        return _dbContext.ParkingLots
-            .AsNoTracking()
-            .Where(p => p.IsAvailable)
-            .ToList();
-    }
+
 }
