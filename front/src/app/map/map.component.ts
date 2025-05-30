@@ -2,10 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {ParkingMapService} from '../../service/parking-map.service';
 import {ParkingLot} from '../../Model/parkingMap';
 import {CommonModule} from '@angular/common';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-map',
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
 })
@@ -17,7 +18,6 @@ export class MapComponent  implements OnInit{
   ngOnInit(): void {
     this.parkingMapService.getParkingMap().subscribe(
       (data:ParkingLot[]) => {
-        console.log('Parking map data:', data);
         this.groupByRow(data);
       },
       (error) => {
