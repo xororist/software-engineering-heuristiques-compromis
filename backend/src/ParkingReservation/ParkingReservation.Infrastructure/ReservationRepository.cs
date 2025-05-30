@@ -23,8 +23,12 @@ public class ReservationRepository: IReservationRepository
         var reservation = reservations.FirstOrDefault(r => r.User.Id == userId);
         return Task.FromResult(reservation);
     }
-
-
+    
+    public void AddReservationAsync(Reservation reservation)
+    {
+        reservations.Add(reservation);
+    }
+    
     public void CheckInReservationAsync(Guid reservationId)
     {
         var userReservations = reservations.FirstOrDefault(r => r.Id == reservationId);

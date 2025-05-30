@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using ParkingReservation.Application.Dtos;
 using ParkingReservation.Application.UsesCases;
 using ParkingReservation.Application.UsesCases.CheckInReservation;
+using ParkingReservation.Application.UsesCases.MakeAReservation;
 using ParkingReservation.Domain.Query;
+using ParkingReservation.Domain.Repositories;
 using ParkingReservation.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +14,10 @@ var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 const string allowAll = "allowAll";
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IQueryAvailablePlaces, ParkingRepository>();
 builder.Services.AddScoped<IGetAvailablePlaces, GetAvailablePlaces>();
+builder.Services.AddScoped<IMakeAReservationHandler, MakeAReservationHandler>();
 
 builder.Services.AddCors(options =>
 {
@@ -48,6 +52,20 @@ app.MapGet("/available-places", (IGetAvailablePlaces query) =>
 
 app.MapOpenApi();
 app.UseCors(allowAll);
+
+app.MapPost("/make-reservation/",
+    async ([FromBody] MakeAReservationCommand command, [FromServices] IMakeAReservationHandler query) =>
+    {
+        try
+        {
+            await query.HandleAsync(command);
+            return Results.Ok();
+        }
+        catch (Exception e)
+        {
+            return Results.BadRequest(e.Message);
+        }
+    });
 
 app.MapPost("/check-in/",
     async ([FromBody] CheckInAReservationCommand command, [FromServices] ICheckInAReservationHandler query) =>

@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="UsesCases\CancelAReservation\" />
-    <Folder Include="UsesCases\MakeAReservation\" />
   </ItemGroup>
 
 </Project>
