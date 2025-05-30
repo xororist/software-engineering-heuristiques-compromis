@@ -36,6 +36,11 @@ public class ReservationRepository: IReservationRepository
             .Include(r => r!.ParkingLot)
             .FirstOrDefaultAsync(r => r != null && r.User.Id == userId);
     }
+    
+    public void AddReservationAsync(Reservation reservation)
+    {
+        reservations.Add(reservation);
+    }
 
     public async Task CancelReservationAsync(Guid reservationId)
     {

@@ -5,6 +5,7 @@ using ParkingReservation.Application.UsesCases;
 using ParkingReservation.Application.UseCases.CancelReservation;
 using ParkingReservation.Application.UsesCases.CheckInReservation;
 using ParkingReservation.Domain;
+using ParkingReservation.Application.UsesCases.MakeAReservation;
 using ParkingReservation.Domain.Query;
 using ParkingReservation.Domain.Repositories;
 using ParkingReservation.Infrastructure;
@@ -15,8 +16,10 @@ var configuration = builder.Configuration;
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 const string allowAll = "allowAll";
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IQueryAvailablePlaces, ParkingRepository>();
 builder.Services.AddScoped<IGetAvailablePlaces, GetAvailablePlaces>();
+builder.Services.AddScoped<IMakeAReservationHandler, MakeAReservationHandler>();
 builder.Services.AddScoped<ICancelAReservationHandler, CancelAReservationHandler>();
 
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
@@ -72,6 +75,20 @@ app.MapGet("/available-places", async ([FromServices] IGetAvailablePlaces getAva
 
 
 app.UseCors(allowAll);
+
+app.MapPost("/make-reservation/",
+    async ([FromBody] MakeAReservationCommand command, [FromServices] IMakeAReservationHandler query) =>
+    {
+        try
+        {
+            await query.HandleAsync(command);
+            return Results.Ok();
+        }
+        catch (Exception e)
+        {
+            return Results.BadRequest(e.Message);
+        }
+    });
 
 app.MapPost("/check-in/",
     async ([FromBody] CheckInAReservationCommand command, [FromServices] ICheckInAReservationHandler query) =>
