@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ParkingReservation.Application.Dtos;
 using ParkingReservation.Application.UsesCases;
+using ParkingReservation.Application.UseCases.CancelReservation;
 using ParkingReservation.Application.UsesCases.CheckInReservation;
 using ParkingReservation.Domain;
 using ParkingReservation.Domain.Query;
@@ -16,6 +17,8 @@ const string allowAll = "allowAll";
 
 builder.Services.AddScoped<IQueryAvailablePlaces, ParkingRepository>();
 builder.Services.AddScoped<IGetAvailablePlaces, GetAvailablePlaces>();
+builder.Services.AddScoped<ICancelAReservationHandler, CancelAReservationHandler>();
+
 
 builder.Services.AddDbContext<ReservationDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -80,4 +83,18 @@ app.MapPost("/check-in/",
         }
     });
 
+app.MapPost("/cancel-reservation", async (CancelAReservationCommand command, ICancelAReservationHandler handler) =>
+{
+    try
+    {
+        await handler.HandleAsync(command);
+        return Results.Ok("Reservation cancelled successfully.");
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest(e.Message);
+    }
+});
+
 app.Run();
+

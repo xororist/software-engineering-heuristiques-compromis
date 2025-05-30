@@ -12,6 +12,7 @@ public class Reservation
     public DateTime BeginningOfReservation { get; set; }
     public DateTime EndOfReservation { get; set; }
     public bool HasBeenConfirmed { get; set; }
+    public bool HasBeenCancelled { get; set; }
 
     public Reservation() {}
 
@@ -24,6 +25,7 @@ public class Reservation
         User = user;
         BeginningOfReservation = beginning;
         EndOfReservation = end;
+        HasBeenCancelled = false;
         ParkingLot = parkingLot;
         HasBeenConfirmed = false;
     }
