@@ -1,6 +1,8 @@
+
 using ParkingReservation.Application.UsesCases;
 using ParkingReservation.Domain.Query;
 using ParkingReservation.Infrastructure;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,5 +48,18 @@ app.MapGet("/available-places", (IGetAvailablePlaces query) =>
 
 app.MapOpenApi();
 app.UseCors(allowFrontend);
+
+app.MapGet("/check-in/", async (CheckInAReservationCommand command,ICheckInAReservationHandler query) =>
+{
+    try
+    {
+        await query.HandleAsync(command);
+        return Results.Ok();
+    }
+    catch (Exception e)
+    {
+        return Results.BadRequest(e.Message);
+    }
+});
 
 app.Run();
