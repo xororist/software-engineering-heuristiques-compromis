@@ -16,4 +16,8 @@
     <Folder Include="UsesCases\CheckAvailablePlaces\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FastEndpoints.Swagger.Swashbuckle" Version="2.3.0" />
+  </ItemGroup>
+
 </Project>
