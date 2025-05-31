@@ -53,7 +53,7 @@ app.UseSwaggerUI();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ReservationDbContext>();
-
+    db.Database.Migrate();
     if (!db.ParkingLots.Any())
     {
         var rows = new[] { 'A', 'B', 'C', 'D', 'E', 'F' };
@@ -95,7 +95,7 @@ app.MapPost("/make-reservation",
         }
         catch (Exception e)
         {
-            return Results.BadRequest(e.Message);
+            return Results.BadRequest(e.StackTrace);
         }
     });
 

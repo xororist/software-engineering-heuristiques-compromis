@@ -20,7 +20,7 @@ namespace ParkingReservation.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Row = table.Column<char>(type: "character(1)", maxLength: 1, nullable: false),
                     Column = table.Column<int>(type: "integer", nullable: false),
-                    IsAvailable = table.Column<bool>(type: "boolean", nullable: false)
+
                 },
                 constraints: table =>
                 {
