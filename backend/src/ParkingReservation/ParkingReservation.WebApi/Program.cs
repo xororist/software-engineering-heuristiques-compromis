@@ -134,5 +134,19 @@ app.MapGet("/ongoing-reservations/{userId:guid}", async (
     return Results.Ok(result);
 });
 
+app.MapPost("/cancel-reservation",
+    async ([FromBody] CancelAReservationCommand command, [FromServices] ICancelAReservationHandler handler) =>
+    {
+        try
+        {
+            await handler.HandleAsync(command);
+            return Results.Ok("Réservation annulée avec succès.");
+        }
+        catch (Exception e)
+        {
+            return Results.BadRequest($"Erreur lors de l'annulation : {e.Message}");
+        }
+    });
+
 app.Run();
 
