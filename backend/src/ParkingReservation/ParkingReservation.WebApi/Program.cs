@@ -6,6 +6,7 @@ using ParkingReservation.Application.UseCases.CancelReservation;
 using ParkingReservation.Application.UsesCases.CheckInReservation;
 using ParkingReservation.Domain;
 using ParkingReservation.Application.UsesCases.MakeAReservation;
+using ParkingReservation.Application.UsesCases.ManualyCreateUser;
 using ParkingReservation.Domain.Query;
 using ParkingReservation.Domain.Repositories;
 using ParkingReservation.Infrastructure;
@@ -23,6 +24,7 @@ builder.Services.AddScoped<IMakeAReservationHandler, MakeAReservationHandler>();
 builder.Services.AddScoped<ICancelAReservationHandler, CancelAReservationHandler>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IParkingLotRepository, ParkingLotRepository>();
+builder.Services.AddScoped<IManualyCreateUserHandler, ManualyCreateUserHandler>();
 
 builder.Services.AddScoped<ICheckInAReservationHandler, CheckInAReservationHandler>();
 builder.Services.AddDbContext<ReservationDbContext>(options =>
@@ -102,6 +104,19 @@ app.MapPost("/check-in",
         }
     });
 
+app.MapPost("/create-user",
+    async ([FromBody] ManualyCreateUserCommand command, [FromServices] IManualyCreateUserHandler handler) =>
+    {
+        try
+        {
+            var id = await handler.HandleAsync(command);
+            return Results.Ok(new { userId = id });
+        }
+        catch (Exception e)
+        {
+            return Results.BadRequest(e.Message);
+        }
+    });
 
 
 app.Run();

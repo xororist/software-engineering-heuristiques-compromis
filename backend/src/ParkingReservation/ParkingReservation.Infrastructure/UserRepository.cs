@@ -18,9 +18,10 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
-    
-    public void AddUser(User user)
+
+    public async Task AddUserAsync(User user)
     {
         _dbContext.Users.Add(user);
+        await _dbContext.SaveChangesAsync();
     }
 }
