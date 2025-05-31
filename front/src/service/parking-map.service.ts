@@ -17,9 +17,9 @@ export class ParkingMapService {
   }
 
   getAvailablePlacesByDate(date: string): Observable<ParkingLot[]> {
-    const formattedDate = `${date}T00:00:00`;
-    return this.http.get<ParkingLot[]>(`${this.API_URL}/available-place`, {
-      params: { date: formattedDate }
+
+    return this.http.get<ParkingLot[]>(`${this.API_URL}/available-places`, {
+      params: { date: date }
     });
   }
 }

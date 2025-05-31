@@ -35,14 +35,13 @@
     <div class="w-8 font-bold text-gray-700 text-center">A</div>
     <div class="flex gap-1">
       <div *ngFor="let spot of parkingData['A']; let i = index"
-           class="w-24 h-16 border-2 rounded flex flex-col items-center justify-center text-xs font-bold text-black"
+           class="w-24 h-16 border-2 rounded flex flex-col items-center justify-center text-xs font-bold text-black cursor-pointer hover:shadow-lg transition-shadow"
            [ngClass]="{
              'border-green-500': spot.isAvailable,
              'border-red-500': !spot.isAvailable
-           }">
-        <!-- Icône éclair pour station de recharge -->
+           }"
+           (click)="spot.isAvailable && onSpotClick('A', spot.column)">
         <mat-icon class="text-black mb-1" style="font-size: 25px;">ev_station</mat-icon>
-        <!-- Numéro de la place -->
         {{ 'A' + (spot.column + 1).toString().padStart(2, '0') }}
       </div>
     </div>
@@ -58,11 +57,12 @@
     <div class="w-8 font-bold text-gray-700 text-center">{{ row }}</div>
     <div class="flex gap-1">
       <div *ngFor="let spot of parkingData[row]; let i = index"
-           class="w-24 h-16 border-2 rounded flex items-center justify-center text-sm font-bold text-black"
+           class="w-24 h-16 border-2 rounded flex items-center justify-center text-sm font-bold text-black cursor-pointer hover:shadow-lg transition-shadow"
            [ngClass]="{
              'border-green-500': spot.isAvailable,
              'border-red-500': !spot.isAvailable
-           }">
+           }"
+           (click)="spot.isAvailable && onSpotClick(row, spot.column)">
         {{ row + (spot.column + 1).toString().padStart(2, '0') }}
       </div>
     </div>
@@ -79,11 +79,12 @@
     <div class="w-8 font-bold text-gray-700 text-center">{{ row }}</div>
     <div class="flex gap-1">
       <div *ngFor="let spot of parkingData[row]; let i = index"
-           class="w-24 h-16 border-2 rounded flex items-center justify-center text-sm font-bold text-black"
+           class="w-24 h-16 border-2 rounded flex items-center justify-center text-sm font-bold text-black cursor-pointer hover:shadow-lg transition-shadow"
            [ngClass]="{
              'border-green-500': spot.isAvailable,
              'border-red-500': !spot.isAvailable
-           }">
+           }"
+           (click)="spot.isAvailable && onSpotClick(row, spot.column)">
         {{ row + (spot.column + 1).toString().padStart(2, '0') }}
       </div>
     </div>
@@ -99,11 +100,12 @@
     <div class="w-8 font-bold text-gray-700 text-center">F</div>
     <div class="flex gap-1">
       <div *ngFor="let spot of parkingData['F']; let i = index"
-           class="w-24 h-16 border-2 rounded flex flex-col items-center justify-center text-xs font-bold text-black"
+           class="w-24 h-16 border-2 rounded flex flex-col items-center justify-center text-xs font-bold text-black cursor-pointer hover:shadow-lg transition-shadow"
            [ngClass]="{
              'border-green-500': spot.isAvailable,
              'border-red-500': !spot.isAvailable
-           }">
+           }"
+           (click)="spot.isAvailable && onSpotClick('F', spot.column)">
         <mat-icon class="text-black mb-1" style="font-size: 25px;">ev_station</mat-icon>
         {{ 'F' + (spot.column + 1).toString().padStart(2, '0') }}
       </div>
@@ -123,6 +125,50 @@
     </div>
   </div>
 
+  <!-- Popup de réservation -->
+  <div *ngIf="showReservationPopup && selectedSpot" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-96">
+      <h2 class="text-xl font-bold mb-4">Réserver une place</h2>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Place sélectionnée</label>
+          <p class="mt-1 text-lg font-semibold">{{selectedSpot.row}}{{selectedSpot.column + 1}}</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">ID Utilisateur</label>
+          <input type="text" 
+                 [(ngModel)]="reservationData.userId"
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Date de début</label>
+          <input type="date" 
+                 [(ngModel)]="reservationData.beginningDate"
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Date de fin</label>
+          <input type="date" 
+                 [(ngModel)]="reservationData.endDate"
+                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+        </div>
+
+        <div class="flex justify-end gap-3 mt-6">
+          <button (click)="closeReservationPopup()" 
+                  class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Annuler
+          </button>
+          <button (click)="submitReservation()" 
+                  class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Réserver
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="mt-10 p-4 flex flex-row">
 
