@@ -1,4 +1,50 @@
-<div class="settings-container">
-  <h2>Page Settings</h2>
-  <p>Contenu de la page Settings</p>
+<div class="p-4">
+  <h2 class="text-xl font-bold mb-4">Gérer les réservations par utilisateur</h2>
+
+  <div class="mb-4 flex items-center space-x-2">
+    <input [(ngModel)]="userIdInput" placeholder="Saisir User ID" class="border p-2 rounded w-80" />
+    <button (click)="fetchReservations()" class="bg-blue-500 text-white px-4 py-2 rounded">Rechercher</button>
+  </div>
+
+  <div *ngIf="reservations.length === 0" class="text-gray-500 mt-4">
+    Aucune réservation trouvée pour cet utilisateur.
+  </div>
+
+  <table *ngIf="reservations.length > 0" class="table-auto w-full mt-4 border">
+    <thead>
+    <tr class="bg-gray-100">
+      <th class="border p-2">Row</th>
+      <th class="border p-2">Column</th>
+      <th class="border p-2">Start</th>
+      <th class="border p-2">End</th>
+      <th class="border p-2">Confirmed</th>
+      <th class="border p-2">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let reservation of reservations" class="border-b">
+      <td class="border p-2">{{ reservation.row }}</td>
+      <td class="border p-2">{{ reservation.column }}</td>
+      <td class="border p-2">{{ reservation.start }}</td>
+      <td class="border p-2">{{ reservation.end }}</td>
+      <td class="border p-2">{{ reservation.isConfirmed ? 'Oui' : 'Non' }}</td>
+      <td class="border p-2 text-center">
+        <button (click)="confirmDelete(reservation)" class="text-red-500 hover:text-red-700">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Confirmation Dialog -->
+  <div *ngIf="showConfirmDialog" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white p-6 rounded shadow-lg">
+      <p class="mb-4">Confirmer la suppression de la réservation ?</p>
+      <div class="flex justify-end space-x-2">
+        <button (click)="deleteReservation()" class="bg-red-500 text-white px-4 py-2 rounded">Oui</button>
+        <button (click)="cancelDelete()" class="bg-gray-300 px-4 py-2 rounded">Non</button>
+      </div>
+    </div>
+  </div>
 </div>
