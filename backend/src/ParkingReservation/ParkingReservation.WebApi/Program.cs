@@ -4,6 +4,7 @@ using ParkingReservation.Application.Dtos;
 using ParkingReservation.Application.UsesCases;
 using ParkingReservation.Application.UseCases.CancelReservation;
 using ParkingReservation.Application.UsesCases.CheckInReservation;
+using ParkingReservation.Application.UsesCases.GetOngoingReservationsAsSecretary;
 using ParkingReservation.Domain;
 using ParkingReservation.Application.UsesCases.MakeAReservation;
 using ParkingReservation.Domain.Query;
@@ -23,6 +24,8 @@ builder.Services.AddScoped<IMakeAReservationHandler, MakeAReservationHandler>();
 builder.Services.AddScoped<ICancelAReservationHandler, CancelAReservationHandler>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IParkingLotRepository, ParkingLotRepository>();
+builder.Services.AddScoped<IGetOngoingReservations, GetOngoingReservations>();
+builder.Services.AddScoped<IGetOngoingReservationsHandler, GetOngoingReservationsHandler>();
 
 builder.Services.AddScoped<ICheckInAReservationHandler, CheckInAReservationHandler>();
 builder.Services.AddDbContext<ReservationDbContext>(options =>
@@ -102,7 +105,13 @@ app.MapPost("/check-in",
         }
     });
 
-
+app.MapGet("/ongoing-reservations/{userId:guid}", async (
+    Guid userId,
+    [FromServices] IGetOngoingReservationsHandler handler) =>
+{
+    var result = await handler.HandleAsync(userId);
+    return Results.Ok(result);
+});
 
 app.Run();
 
