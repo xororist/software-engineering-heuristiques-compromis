@@ -98,7 +98,7 @@ app.MapPost("/make-reservation",
         }
         catch (Exception e)
         {
-            return Results.BadRequest(e.Message);
+            return Results.BadRequest(e.StackTrace);
         }
     });
 

@@ -28,3 +28,17 @@
 .unavailable {
   background-color: red;
 }
+
+/* Animation pour le bouton */
+button {
+  transform: translateY(0);
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(1px);
+}
