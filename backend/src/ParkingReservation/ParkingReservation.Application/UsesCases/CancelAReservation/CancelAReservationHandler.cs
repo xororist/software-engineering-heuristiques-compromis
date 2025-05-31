@@ -15,9 +15,12 @@ public class CancelAReservationHandler(IReservationRepository repository) : ICan
         if (reservation.User.Id != command.UserId)
             throw new Exception("You can only cancel your own reservations.");
 
+        if (reservation.HasBeenConfirmed)
+            throw new Exception("You cannot cancel a reservation that has already been confirmed.");
+
         if (DateTime.Now >= reservation.BeginningOfReservation)
             throw new Exception("You cannot cancel a reservation that has already started.");
 
-        repository.CancelReservationAsync(command.ReservationId);
+        await repository.CancelReservationAsync(command.ReservationId);
     }
 }
