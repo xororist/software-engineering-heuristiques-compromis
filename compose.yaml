@@ -1,4 +1,24 @@
 services:
+  db:
+    container_name: postgres-database
+    image: postgres
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_DB=example
+      - POSTGRES_PASSWORD=cute
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432 
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "example"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   server:
     container_name: reservation-service
     build:
@@ -6,9 +26,12 @@ services:
       target: final
     ports:
       - 8080:8080
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=db;Database=example;Username=postgres;Password=cute;Port=5432
     depends_on:
       db:
         condition: service_healthy
+    restart: unless-stopped
 
   frontend:
     container_name: frontend
@@ -17,27 +40,11 @@ services:
     ports:
       - 3000:80  
     environment:
-      - NODE_ENV=development  
+      - NODE_ENV=development
+      - REACT_APP_API_URL=http://localhost:8080
     depends_on:
       - server
-
-  db:
-    container_name: postgres-database
-    image: postgres
-    restart: always
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=example
-      - POSTGRES_PASSWORD=cute
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    ports:
-      - 5432:5432 
-    healthcheck:
-      test: ["CMD", "pg_isready"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    restart: unless-stopped
         
 volumes:
   db-data:

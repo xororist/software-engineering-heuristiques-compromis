@@ -1,6 +1,0 @@
-@ParkingReservation.WebApi_HostAddress = http://localhost:5097
-
-GET {{ParkingReservation.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
