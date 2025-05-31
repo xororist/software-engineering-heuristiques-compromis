@@ -80,9 +80,19 @@ app.MapGet("/available-places", async (
     [FromQuery] DateTime date, 
     [FromServices] IGetAvailablePlaces getAvailablePlaces) =>
 {
-    var result = await getAvailablePlaces.Handle(date);
-    return Results.Ok(result);
+    try
+    {
+        var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+        var result = await getAvailablePlaces.Handle(utcDate);
+        return Results.Ok(result);
+    }
+    catch (Exception e)
+    {
+        return Results.Problem("Erreur interne survenue : " + e.Message);
+    }
 });
+
+
 
 
 
