@@ -1,5 +1,20 @@
 <div class="flex flex-col items-center justify-center space-y-4">
 
+  <!-- Date picker et bouton de validation -->
+  <div class="flex items-center justify-center mb-6 gap-4">
+    <div class="relative">
+      <input type="date" 
+             class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+             [(ngModel)]="selectedDate"
+             (change)="onDateChange()">
+      <mat-icon class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">calendar_today</mat-icon>
+    </div>
+    <button (click)="validateDate()" 
+            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center gap-2">
+      <mat-icon>check</mat-icon>
+      Valider
+    </button>
+  </div>
 
   <div class="flex items-center gap-2">
     <div class="w-8"></div> <!-- Espace pour aligner avec le label A -->
