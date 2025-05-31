@@ -11,7 +11,9 @@ public interface IReservationRepository
     Task CheckInReservationAsync(Guid reservationId);
     Task CancelReservationAsync(Guid reservationId);
     Task<IEnumerable<ParkingLot>> FetchAvailablePlacesAsync();
-    
+
     Task<bool> IsParkingLotAvailableAsync(int parkingLotId, DateTime start, DateTime end);
+    
+    Task<IEnumerable<(char row, int column)>> GetReservedCoordinatesAtDateAsync(DateTime date);
 
 }

@@ -89,4 +89,17 @@ public class ReservationRepository: IReservationRepository
                 r.EndOfReservation > start &&
                 !r.HasBeenCancelled);
     }
+    
+    public async Task<IEnumerable<(char row, int column)>> GetReservedCoordinatesAtDateAsync(DateTime date)
+    {
+        return await _dbContext.Reservations
+            .Include(r => r.ParkingLot)
+            .Where(r =>
+                !r.HasBeenCancelled &&
+                r.ParkingLot != null &&
+                r.BeginningOfReservation < date &&
+                r.EndOfReservation > date)
+            .Select(r => new ValueTuple<char, int>(r.ParkingLot.Row, r.ParkingLot.Column))
+            .ToListAsync();
+    }
 }

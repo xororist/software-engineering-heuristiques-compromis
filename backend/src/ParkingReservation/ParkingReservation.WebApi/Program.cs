@@ -53,7 +53,7 @@ app.UseSwaggerUI();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ReservationDbContext>();
-
+    db.Database.Migrate();
     if (!db.ParkingLots.Any())
     {
         var rows = new[] { 'A', 'B', 'C', 'D', 'E', 'F' };
@@ -76,11 +76,14 @@ using (var scope = app.Services.CreateScope())
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/available-places", async ([FromServices] IGetAvailablePlaces getAvailablePlaces) =>
+app.MapGet("/available-places", async (
+    [FromQuery] DateTime date, 
+    [FromServices] IGetAvailablePlaces getAvailablePlaces) =>
 {
-    var result = await getAvailablePlaces.Handle();
+    var result = await getAvailablePlaces.Handle(date);
     return Results.Ok(result);
 });
+
 
 
 app.UseCors(allowAll);

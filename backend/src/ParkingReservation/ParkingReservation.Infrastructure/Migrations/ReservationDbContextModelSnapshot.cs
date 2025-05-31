@@ -33,9 +33,6 @@ namespace ParkingReservation.Infrastructure.Migrations
                     b.Property<int>("Column")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("boolean");
-
                     b.Property<char>("Row")
                         .HasMaxLength(1)
                         .HasColumnType("character(1)");
